@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#000604">
+<title>DIGIGUARD | RSA Challenge–Response Verification</title>
+<style>
+:root{--g:#00ff9d;--c:#00f5d4;--bg:#000604;--line:rgba(0,255,180,.62);--red:#ff304e}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;min-height:100%;background:#000604;color:#dffff5;font-family:Inter,Segoe UI,Arial,sans-serif}body{height:100vh;height:100dvh;min-height:0;overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 56%,rgba(0,55,39,.4),transparent 55%),#000604}#matrix{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:.68;pointer-events:none}.scan{position:fixed;inset:0;pointer-events:none;z-index:3;background:repeating-linear-gradient(0deg,rgba(0,255,140,.025) 0 1px,transparent 1px 4px)}.scene{position:fixed;inset:0;z-index:1;width:100%;height:100vh;height:100dvh;min-height:0;margin:auto;padding:18px 26px 16px;overflow:hidden;display:grid;grid-template-columns:minmax(180px,1fr) minmax(380px,1.65fr) minmax(180px,1fr);grid-template-rows:auto 1fr;gap:12px 26px;align-items:center}.side{position:relative;align-self:center;min-height:260px;border:1px solid rgba(0,255,190,.65);background:linear-gradient(145deg,rgba(0,29,26,.46),rgba(0,5,6,.25));clip-path:polygon(0 7%,7% 0,93% 0,100% 7%,100% 93%,93% 100%,7% 100%,0 93%);padding:17px 16px;box-shadow:0 0 28px rgba(0,255,150,.12),inset 0 0 26px rgba(0,255,150,.07);animation:float 5s ease-in-out infinite;backdrop-filter:blur(3px)}.side.right{animation-delay:-2.5s}.side:after{content:"";position:absolute;top:-50%;bottom:-50%;width:20%;left:-40%;background:linear-gradient(90deg,transparent,rgba(0,255,190,.18),transparent);transform:skewX(-20deg);animation:sweep 6s linear infinite}@keyframes sweep{to{left:130%}}@keyframes float{50%{transform:translateY(-8px)}}.side-title{font-size:clamp(12px,1vw,17px);font-weight:800;color:var(--c);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid rgba(0,255,180,.35);padding-bottom:12px}.cert-art{height:135px;display:grid;place-items:center;position:relative;margin:9px 0}.cert-paper{width:112px;height:122px;border:2px solid var(--g);border-radius:9px;background:linear-gradient(145deg,rgba(0,255,160,.13),rgba(0,8,8,.4));box-shadow:0 0 20px rgba(0,255,150,.23);padding:15px 12px;transform:perspective(400px) rotateY(-8deg);animation:paper 4s ease-in-out infinite}.cert-paper i{display:block;height:3px;background:var(--g);opacity:.8;margin:9px 0;width:82%}.cert-paper i:nth-child(2){width:65%}.cert-paper i:nth-child(3){width:75%}.cert-paper i:nth-child(4){width:55%}.seal{position:absolute;bottom:3px;right:calc(50% - 63px);font-size:29px;filter:drop-shadow(0 0 8px var(--g));animation:pulse 2s infinite}@keyframes paper{50%{transform:perspective(400px) rotateY(8deg) translateY(-3px)}}@keyframes pulse{50%{filter:drop-shadow(0 0 16px var(--g));transform:scale(1.08)}}.feature{display:flex;gap:9px;align-items:center;font-size:clamp(10px,.88vw,13px);color:#b4e8d9;margin:10px 0;position:relative}.feature b{display:inline-block;width:7px;height:7px;background:var(--g);border-radius:50%;box-shadow:0 0 9px var(--g);flex:none}.center{align-self:center;text-align:center;position:relative;padding:0 2px}.top-emblem{width:66px;height:70px;margin:0 auto 8px;position:relative;color:var(--g);filter:drop-shadow(0 0 14px rgba(0,255,157,.9));animation:float 3s ease-in-out infinite}.top-emblem svg{width:100%;height:100%}.circuit{height:16px;width:80%;max-width:520px;margin:-6px auto 9px;border-top:1px solid rgba(0,255,157,.55);position:relative}.circuit:before,.circuit:after{content:"";position:absolute;top:-5px;width:45%;height:8px;border-top:1px solid var(--g);border-bottom:1px solid rgba(0,255,157,.35)}.circuit:before{left:0;transform:skewX(-40deg)}.circuit:after{right:0;transform:skewX(40deg)}h1{font-size:clamp(23px,2.45vw,40px);letter-spacing:clamp(1px,.35vw,5px);line-height:1.08;margin:0;text-transform:uppercase;color:#eafffa;font-weight:900;text-shadow:0 0 16px rgba(0,255,180,.25);white-space:nowrap}h1 span{color:var(--g)}.subtitle{font-size:clamp(10px,1.1vw,16px);letter-spacing:clamp(1px,.4vw,4px);font-weight:800;color:var(--c);margin:8px 0 8px}.desc{font-size:clamp(10px,.95vw,14px);color:#a7dcd3;margin:0 auto 18px;max-width:610px}.verify{width:min(100%,360px);min-height:51px;border:2px solid var(--g);border-radius:10px;background:rgba(0,255,140,.07);color:var(--g);font-weight:900;font-size:clamp(11px,1vw,15px);cursor:pointer;letter-spacing:.4px;box-shadow:0 0 10px var(--g),inset 0 0 12px rgba(0,255,140,.14);transition:.25s;animation:glow 2.5s ease-in-out infinite}.verify:hover{background:rgba(0,255,140,.2);transform:translateY(-2px);box-shadow:0 0 28px rgba(0,255,140,.8)}@keyframes glow{50%{box-shadow:0 0 23px rgba(0,255,157,.8),inset 0 0 16px rgba(0,255,140,.22)}}.finger{font-size:22px;vertical-align:-2px;margin-right:12px}.arrow{font-size:22px;margin-left:14px}.result{max-width:550px;margin:15px auto 0;border:1px solid var(--g);border-radius:13px;text-align:left;background:linear-gradient(130deg,rgba(0,18,17,.95),rgba(0,6,8,.94));box-shadow:0 0 22px rgba(0,255,157,.12),inset 0 0 22px rgba(0,255,157,.04);overflow:hidden}.result-head{font-size:13px;font-weight:800;padding:11px 17px 8px;color:#d8fff4;display:flex;justify-content:space-between;align-items:center}.close{color:var(--c);font-weight:400}.status{display:grid;grid-template-columns:31px 1fr;gap:10px;align-items:center;padding:8px 16px;border-top:1px solid rgba(0,255,180,.13)}.check{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:var(--g);color:#00291a;font-weight:1000;font-size:17px;box-shadow:0 0 14px rgba(0,255,157,.65)}.status strong{font-size:12px;color:#dffff5;display:block}.status small{display:block;font-size:10px;color:#8fcfc1;margin-top:3px}.globe-wrap{height:145px;display:grid;place-items:center;position:relative;margin:5px 0 6px}.globe{width:126px;height:126px;border:1px solid var(--g);border-radius:50%;position:relative;overflow:hidden;background:radial-gradient(circle at 35% 30%,rgba(0,255,170,.28),rgba(0,50,39,.12) 55%,transparent 70%);box-shadow:0 0 24px rgba(0,255,157,.3),inset 0 0 22px rgba(0,255,157,.18);animation:spin 18s linear infinite}.globe:before{content:"";position:absolute;inset:-4px 25%;border:1px solid rgba(0,255,157,.8);border-radius:50%}.globe:after{content:"";position:absolute;inset:25% -5px;border:1px solid rgba(0,255,157,.7);border-radius:50%}.land{position:absolute;inset:12px;background-image:radial-gradient(circle,rgba(0,255,157,.95) 1px,transparent 1.8px);background-size:7px 7px;clip-path:polygon(18% 12%,45% 8%,54% 23%,45% 37%,60% 46%,48% 61%,53% 81%,35% 72%,28% 52%,12% 43%,7% 25%);opacity:.75}.land.two{clip-path:polygon(58% 8%,80% 17%,91% 34%,78% 45%,83% 64%,65% 83%,55% 62%,62% 48%,51% 34%);opacity:.65}@keyframes spin{to{transform:rotate(360deg)}}.orbit{position:absolute;width:170px;height:38px;border:1px solid rgba(0,255,157,.65);border-radius:50%;transform:rotate(-15deg);box-shadow:0 0 12px rgba(0,255,157,.15);animation:orbit 7s linear infinite}.orbit.two{width:155px;height:50px;transform:rotate(55deg);animation-direction:reverse;border-color:rgba(0,255,157,.4)}@keyframes orbit{to{rotate:360deg}}.side.right .feature{white-space:nowrap}.status.failed .check{background:var(--red);color:white}.status.failed strong{color:#ff7185}body.failed{--g:#ff304e;--c:#ff6479;--line:rgba(255,48,78,.65)}body.failed .side{border-color:rgba(255,48,78,.65);box-shadow:0 0 28px rgba(255,48,78,.12)}body.failed .side-title{color:#ff657c;border-color:rgba(255,48,78,.4)}body.failed .cert-paper{border-color:var(--red)}body.failed .cert-paper i{background:var(--red)}body.failed .seal{filter:drop-shadow(0 0 8px var(--red))}body.failed .globe{border-color:var(--red);box-shadow:0 0 24px rgba(255,48,78,.3),inset 0 0 22px rgba(255,48,78,.18)}body.failed .globe:before,body.failed .globe:after{border-color:rgba(255,48,78,.8)}body.failed .land{background-image:radial-gradient(circle,rgba(255,48,78,.95) 1px,transparent 1.8px)}body.failed .orbit{border-color:rgba(255,48,78,.65)}body.failed .verify{border-color:var(--red);color:#ff7083;box-shadow:0 0 14px var(--red),inset 0 0 12px rgba(255,48,78,.14)}body.failed .result{border-color:var(--red);box-shadow:0 0 22px rgba(255,48,78,.12)}body.failed .status{border-color:rgba(255,48,78,.18)}body.failed .status:nth-child(3) .check{background:var(--red);color:white}body.failed .status:nth-child(3) strong{color:#ff7083}body.failed #matrix{filter:hue-rotate(110deg)}.hint{text-align:center;font-size:9px;color:rgba(115,196,174,.58);margin-top:8px;letter-spacing:1px}
+
+/* Click-state authentication console: replaces only the center content; side panels stay in place */
+.auth-console{display:none;max-width:720px;margin:14px auto 0;text-align:left;border:1px solid rgba(0,255,180,.78);border-radius:13px;background:linear-gradient(145deg,rgba(0,18,17,.97),rgba(0,5,7,.97));box-shadow:0 0 24px rgba(0,255,157,.18),inset 0 0 24px rgba(0,255,157,.05);overflow:hidden}
+.auth-console.is-visible{display:block;animation:consoleIn .35s ease-out}
+@keyframes consoleIn{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.console-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(0,255,180,.3);font-size:12px;font-weight:900;color:var(--c);letter-spacing:.7px;background:rgba(0,255,150,.05)}
+.console-lights{color:var(--g);letter-spacing:5px}.console-logs{padding:9px 14px;max-height:190px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--g) rgba(0,255,157,.08);font:clamp(9px,.85vw,12px)/1.55 Consolas,'Courier New',monospace;color:#c7f8e9}.console-logs::-webkit-scrollbar{width:7px}.console-logs::-webkit-scrollbar-track{background:rgba(0,255,157,.06);border-radius:8px}.console-logs::-webkit-scrollbar-thumb{background:rgba(0,255,157,.65);border-radius:8px}.console-logs::-webkit-scrollbar-thumb:hover{background:var(--c)}.console-line{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:7px;align-items:start;min-height:19px}.console-prompt{color:var(--g);font-weight:bold}.console-message{overflow-wrap:anywhere}.console-time{color:var(--c);white-space:nowrap}.console-mark{color:var(--g);font-weight:bold}.console-line.pending .console-mark{color:#7aa99c}.console-line.error .console-prompt,.console-line.error .console-mark{color:var(--red)}
+.center.verifying .top-emblem,.center.verifying .circuit,.center.verifying h1,.center.verifying .subtitle,.center.verifying .desc{display:none}
+.center.verifying{grid-column:2;align-self:center;width:100%;}
+.center.verifying .auth-console{max-width:100%;}
+.center.verifying .result{max-width:100%;margin-top:0}
+.center.verifying .verify{min-height:38px;width:auto;padding:7px 18px;font-size:11px;animation:none}
+.center.verifying .verify .finger,.center.verifying .verify .arrow{display:none}
+.center.verifying .hint{margin-top:9px}
+@media(max-height:760px){.console-logs{max-height:140px;overflow-y:auto}.center.verifying .auth-console{margin-top:7px}.center.verifying .result{margin-top:7px}.center.verifying .console-head{padding:7px 12px}}
+@media(max-width:900px){.scene{grid-template-columns:1fr 1.5fr 1fr;gap:12px;padding:16px 12px}.side{padding:13px 10px;min-height:230px}.cert-art{height:110px}.globe-wrap{height:115px}.globe{width:100px;height:100px}.orbit{width:125px}.side.right .feature{white-space:normal}h1{white-space:normal}.center{min-width:0}}@media(max-width:650px){.scene{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto auto;padding:10px 12px;gap:8px;align-content:center}.center{grid-row:1;min-height:0}.side{min-height:0;max-height:18vh;overflow:hidden;max-width:460px;width:100%;margin:auto;padding:8px 12px}.side.left{grid-row:2}.side.right{grid-row:3}.side.left{grid-row:2}.side.right{grid-row:3}.center{width:100%}.side .cert-art{height:46px;margin:3px 0}.cert-paper{height:42px;width:42px;padding:4px}.cert-paper i{height:2px;margin:4px 0}.seal{font-size:15px;right:calc(50% - 25px)}.side.right .globe-wrap{height:42px}.globe{width:38px;height:38px}.orbit{width:65px;height:18px}.orbit.two{width:55px;height:20px}.side .feature{display:inline-flex;margin:4px 8px 4px 0}.side.right .feature{display:inline-flex;margin:4px 8px 4px 0}.result{margin-top:15px}.top-emblem{width:54px;height:58px}h1{font-size:clamp(22px,7vw,34px);white-space:normal}.subtitle{letter-spacing:2px}.desc{line-height:1.5}.side.right .feature{display:inline-flex;margin-right:12px}.hint{margin-bottom:4px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+/* Stable composition during Ctrl+mouse-wheel / Ctrl+plus-minus zoom */
+html, body { width:100%; height:100%; margin:0; overflow:hidden; }
+.scene {
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh;
+  margin:0; overflow:hidden; box-sizing:border-box;
+  grid-template-columns:minmax(180px,1fr) minmax(380px,1.65fr) minmax(180px,1fr) !important;
+  grid-template-rows:1fr !important;
+  gap:12px 26px !important; padding:18px 26px 16px !important;
+  align-items:center;
+}
+.scene > .side { min-width:0; grid-row:auto !important; max-height:none; }
+.scene > .center { grid-row:auto !important; min-width:0; width:100%; }
+.scene h1 { white-space:nowrap !important; }
+.scene .side.right .feature { white-space:nowrap !important; }
+/* At high zoom the viewport may clip content, but the three-column design won't rearrange. */
+@media (max-width:900px) {
+  .scene { grid-template-columns:minmax(180px,1fr) minmax(380px,1.65fr) minmax(180px,1fr) !important; grid-template-rows:1fr !important; }
+  .scene h1 { white-space:nowrap !important; }
+}
+@media (max-width:650px) {
+  .scene { grid-template-columns:minmax(180px,1fr) minmax(380px,1.65fr) minmax(180px,1fr) !important; grid-template-rows:1fr !important; }
+  .scene > .side { grid-row:auto !important; max-height:none; }
+  .scene h1 { white-space:nowrap !important; }
+}
+
+
+/* Algorithm-focused professional controls and status */
+.test-actions{display:flex;justify-content:center;margin-top:8px}
+.verify.secondary{width:auto;min-height:30px;padding:5px 13px;font-size:10px;letter-spacing:1px;animation:none;box-shadow:none;border-width:1px;border-color:rgba(0,245,212,.55);color:#9deee0;background:rgba(0,245,212,.045)}
+.verify.secondary:hover{background:rgba(0,245,212,.12);box-shadow:0 0 14px rgba(0,245,212,.2)}
+#resultBadge{font-size:9px;letter-spacing:1px;color:#8aaea5}
+body.failed #resultBadge{color:#ff7083}
+.status.pending .check{background:#16342e;color:#a2cfc2;box-shadow:none}
+.verify:disabled{opacity:.65;cursor:wait}
+@media(max-height:720px){.scene{padding-top:8px!important;padding-bottom:8px!important;gap:8px 18px!important}.top-emblem{height:48px;width:48px;margin-bottom:4px}.circuit{margin-bottom:4px}.desc{margin-bottom:10px}.result{margin-top:9px}.status{padding:6px 12px}.side{padding:12px}.cert-art{height:105px}.globe-wrap{height:110px}}
+/* Smooth verification-result reveal: no typing effect on the result text */
+.result,.test-actions,.hint{display:none}
+.result.is-visible,.hint.is-visible{display:block}.test-actions.is-visible{display:flex}
+.result.is-visible{animation:resultReveal .62s cubic-bezier(.2,.75,.25,1) both;transform-origin:top center}
+.result.is-visible .result-head{animation:resultHeadReveal .42s ease-out both}
+.result.is-visible .status{animation:statusReveal .5s cubic-bezier(.2,.7,.25,1) both}
+.result.is-visible .status:nth-child(2){animation-delay:.10s}
+.result.is-visible .status:nth-child(3){animation-delay:.22s}
+.result .check{transition:box-shadow .35s ease,transform .35s ease,background-color .35s ease}
+.result.is-visible .check{animation:checkPop .42s cubic-bezier(.2,.8,.25,1.35) both;animation-delay:.16s}
+.result.is-visible .status:nth-child(3) .check{animation-delay:.28s}
+@keyframes resultReveal{0%{opacity:0;transform:translateY(12px) scale(.985);filter:blur(3px)}65%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes resultHeadReveal{from{opacity:0;letter-spacing:1.8px}to{opacity:1;letter-spacing:normal}}
+@keyframes statusReveal{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes checkPop{0%{opacity:0;transform:scale(.65)}75%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+.type-cursor:after{content:"▌";display:inline-block;margin-left:2px;color:var(--g);animation:blink .75s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+
+/* Smooth, non-typing reveal for the successful connection description */
+#connectionText.connected-smooth {
+  animation: connectedMessageReveal 720ms cubic-bezier(.22,.72,.25,1) both;
+  transform-origin: left center;
+  will-change: opacity, transform, filter;
+}
+@keyframes connectedMessageReveal {
+  0% { opacity: 0; transform: translateY(5px); filter: blur(2px); }
+  65% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #connectionText.connected-smooth { animation: none; }
+}
+
+
+/* Negative-test and server-connection notifications */
+#securityNotice{display:none;position:fixed;z-index:20;top:18px;left:50%;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));padding:13px 18px;border:1px solid var(--red);border-radius:10px;background:rgba(22,0,5,.96);color:#ff9aaa;box-shadow:0 0 24px rgba(255,48,78,.32);font-size:12px;font-weight:800;letter-spacing:.25px;text-align:center;line-height:1.5}
+#securityNotice.show{display:block;animation:noticeIn .35s ease-out both}
+@keyframes noticeIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+body.failed .auth-console,body.failed .console-head{border-color:rgba(255,48,78,.65)}
+body.failed .console-head{color:#ff657c}
+body.failed .console-lights{color:var(--red)}
+body.failed .console-logs .done{color:#ff7185}
+
+
+/* Negative test: eliminate remaining green accents while failure state is active */
+body.failed { background: radial-gradient(ellipse at 50% 56%, rgba(65,0,12,.34), transparent 58%), #060002; }
+body.failed .scan { background: repeating-linear-gradient(0deg, rgba(255,48,78,.035) 0 1px, transparent 1px 4px); }
+body.failed #matrix { filter: hue-rotate(-18deg) saturate(1.8); }
+body.failed .scan { opacity: 1; background: repeating-linear-gradient(0deg, rgba(255,25,65,.09) 0 1px, transparent 1px 4px); }
+body.failed .side { background: linear-gradient(145deg, rgba(35,0,8,.48), rgba(7,0,3,.3)); }
+body.failed .side:after { background: linear-gradient(90deg, transparent, rgba(255,48,78,.18), transparent); }
+body.failed .side-title { border-color: rgba(255,48,78,.4); }
+body.failed .feature b { background: var(--red); box-shadow: 0 0 9px var(--red); }
+body.failed .top-emblem { color: var(--red); filter: drop-shadow(0 0 14px rgba(255,48,78,.75)); }
+body.failed .circuit, body.failed .circuit:before, body.failed .circuit:after { border-color: rgba(255,48,78,.55); }
+body.failed h1 { text-shadow: 0 0 16px rgba(255,48,78,.2); }
+body.failed .subtitle { color: #ff6479; }
+body.failed .desc { color: #e7b9c0; }
+body.failed .console-head { background: rgba(255,48,78,.05); border-color: rgba(255,48,78,.45); }
+body.failed .console-logs { scrollbar-color: rgba(255,48,78,.7) rgba(255,48,78,.08); }
+body.failed .console-logs::-webkit-scrollbar-track { background: rgba(255,48,78,.06); }
+body.failed .console-logs::-webkit-scrollbar-thumb { background: rgba(255,48,78,.7); }
+body.failed .console-logs::-webkit-scrollbar-thumb:hover { background: #ff6479; }
+body.failed .console-prompt, body.failed .console-mark { color: var(--red); }
+body.failed .console-line.pending .console-mark { color: #ff8a9a; }
+body.failed .globe { background: radial-gradient(circle at 35% 30%, rgba(255,48,78,.22), rgba(50,0,12,.12) 55%, transparent 70%); }
+body.failed .globe:before, body.failed .globe:after { border-color: rgba(255,48,78,.8); }
+body.failed .orbit.two { border-color: rgba(255,48,78,.4); }
+body.failed .hint { color: rgba(255,130,150,.65); }
+body.failed .check { background: var(--red); color: #fff; box-shadow: 0 0 14px rgba(255,48,78,.55); }
+body.failed .result-head .close { color: #ff6479; }
+
+</style></head>
+<body><canvas id="matrix"></canvas><div class="scan"></div><div id="securityNotice" role="alert" aria-live="assertive"></div>
+<main class="scene">
+<aside class="side left"><div class="side-title">Identity Key Pair</div><div class="cert-art"><div class="cert-paper"><i></i><i></i><i></i><i></i></div><div class="seal">🏅</div></div><div class="feature"><b></b>RSA public key</div><div class="feature"><b></b>Private key stays client-side</div><div class="feature"><b></b>SHA-256 signature</div><div class="feature"><b></b>Challenge-response proof</div></aside>
+<section class="center"><div class="top-emblem"><svg viewBox="0 0 70 76" fill="none"><path d="M35 3 61 13v20c0 18-11 30-26 39C20 63 9 51 9 33V13L35 3Z" stroke="currentColor" stroke-width="4"/><rect x="24" y="31" width="22" height="18" rx="3" fill="currentColor"/><path d="M28 31v-7a7 7 0 0 1 14 0v7" stroke="currentColor" stroke-width="4"/><circle cx="35" cy="39" r="2" fill="#00251a"/><path d="M35 41v4" stroke="#00251a" stroke-width="2"/></svg></div><div class="circuit"></div><h1>Secure <span>Certificate</span></h1><div class="subtitle">A U T H E N T I C A T I O N&nbsp; S Y S T E M</div><p class="desc">RSA challenge–response authentication using a random server challenge and SHA256withRSA signature verification</p><button class="verify" id="verifyBtn" onclick="authenticate()"><span class="finger">♧</span> VERIFY CLIENT IDENTITY <span class="arrow">→</span></button><div class="test-actions" id="testActions"><button class="verify secondary" id="negativeTestBtn" type="button" onclick="authenticate(true)">RUN NEGATIVE TEST — INVALID SIGNATURE</button></div><section class="auth-console" id="authConsole"><div class="console-head"><span>◈ AUTHENTICATION PROCESS</span><span class="console-lights">● ● ●</span></div><div class="console-logs" id="consoleLogs" aria-live="polite"></div></section><section class="result" id="resultPanel"><div class="result-head">Verification Result <span class="close" id="resultBadge">AWAITING TEST</span></div><div class="status" id="connectionStatus"><div class="check" id="connectionIcon">…</div><div><strong id="connectionTitle">Server Connection</strong><small id="connectionText">Run a test to contact the Java authentication service.</small></div></div><div class="status" id="authStatus"><div class="check" id="authIcon">…</div><div><strong id="authTitle">Signature Verification</strong><small id="authText">Waiting for the server to verify the challenge signature.</small></div></div></section><div class="hint" id="hint">RSA CHALLENGE → SHA-256 SIGNATURE → PUBLIC-KEY VERIFICATION → ACCESS DECISION</div></section>
+<aside class="side right"><div class="side-title">Verification Algorithm</div><div class="globe-wrap"><div class="orbit"></div><div class="orbit two"></div><div class="globe"><div class="land"></div><div class="land two"></div></div></div><div class="feature"><b></b>1. Receive public key</div><div class="feature"><b></b>2. Generate 32-byte challenge</div><div class="feature"><b></b>3. Verify SHA256withRSA</div><div class="feature"><b></b>4. SUCCESS / FAIL decision</div></aside>
+</main>
+<script>
+const canvas=document.getElementById('matrix'),ctx=canvas.getContext('2d');let drops=[],font=12,cols=0;const chars='01アイウエオカキクケコサシスセソ';function resize(){const dpr=Math.min(devicePixelRatio||1,2);canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0);cols=Math.ceil(innerWidth/font);drops=Array.from({length:cols},()=>Math.random()*-55)}function rain(){const failed=document.body.classList.contains('failed');ctx.fillStyle=failed?'rgba(8,0,2,.12)':'rgba(0,4,3,.12)';ctx.fillRect(0,0,innerWidth,innerHeight);ctx.font=font+'px Consolas,monospace';const col=failed?'#ff1744':'#00ff9d';for(let i=0;i<drops.length;i++){ctx.fillStyle=Math.random()>.975?(failed?'#ffb3c1':'#dffff0'):col;ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*font,drops[i]*font);if(drops[i]*font>innerHeight&&Math.random()>.975)drops[i]=Math.random()*-20;drops[i]+=.5+Math.random()*.7}requestAnimationFrame(rain)}addEventListener('resize',resize);resize();rain();
+function typeText(el, text, speed=38){
+ return new Promise(resolve=>{
+  el.textContent=''; el.classList.add('type-cursor'); let i=0;
+  const step=()=>{ if(i<text.length){el.textContent+=text.charAt(i++);setTimeout(step,speed)}else{el.classList.remove('type-cursor');resolve()} };
+  step();
+ });
+}
+async function addLog(message, state='pending'){
+ const logs=document.getElementById('consoleLogs');
+ const row=document.createElement('div'); row.className='console-line '+state;
+ const prompt=document.createElement('span'); prompt.className='console-prompt'; prompt.textContent='>>>';
+ const msg=document.createElement('span'); msg.className='console-message';
+ const time=document.createElement('span'); time.className='console-time';
+ row.append(prompt,msg,time); logs.appendChild(row);
+ for(let i=0;i<message.length;i++){msg.textContent+=message[i]; await new Promise(r=>setTimeout(r,24));}
+ time.textContent='['+new Date().toLocaleTimeString([], {hour12:false})+']';
+ row.classList.remove('pending'); row.classList.add(state);
+ logs.scrollTop=logs.scrollHeight;
+ return {row};
+}
+let noticeTimer;
+function showSecurityNotice(message){
+ const n=document.getElementById('securityNotice');
+ n.textContent=message; n.classList.remove('show'); void n.offsetWidth; n.classList.add('show');
+ clearTimeout(noticeTimer); noticeTimer=setTimeout(()=>n.classList.remove('show'),6500);
+}
+async function authenticate(negativeTest=false){
+ const b=document.getElementById('verifyBtn');
+ const panel=document.getElementById('resultPanel'), hint=document.getElementById('hint');
+ const center=document.querySelector('.center'), consolePanel=document.getElementById('authConsole');
+ panel.classList.add('is-visible'); hint.classList.add('is-visible'); consolePanel.classList.add('is-visible'); center.classList.add('verifying');
+ document.getElementById('consoleLogs').replaceChildren();
+ b.disabled=true; document.body.classList.remove('failed'); document.getElementById('securityNotice').classList.remove('show');
+ document.getElementById('resultBadge').textContent='IN PROGRESS';
+ document.getElementById('connectionTitle').textContent='Connecting to authentication server';
+ document.getElementById('connectionText').textContent='Establishing a connection to the local Java service…';
+ document.getElementById('authTitle').textContent='Signature Verification';
+ document.getElementById('authText').textContent='Waiting for the server to verify the challenge signature.';
+ document.getElementById('connectionIcon').textContent='…'; document.getElementById('authIcon').textContent='…';
+ hint.textContent='RSA CHALLENGE → SHA-256 SIGNATURE → PUBLIC-KEY VERIFICATION → ACCESS DECISION';
+ try {
+  await addLog(negativeTest?'Initializing NEGATIVE TEST (signature will be corrupted)...':'Initializing secure identity verification...');
+  await addLog('Connecting to Java authentication server...');
+  const authUrl='http://localhost:8080/auth'+(negativeTest?'?test=negative':'');
+   const r=await fetch(authUrl,{cache:'no-store'});
+  const result=(await r.text()).trim(); if(!r.ok)throw Error('HTTP '+r.status);
+  if(result==='SERVER_DOWN') throw Error('AUTH_SERVER_UNAVAILABLE');
+  await addLog('Server connection established ✓', 'done');
+  await addLog('Client public key received (RSA) ✓', 'done');
+  await addLog('Generating and processing server challenge... ✓', 'done');
+  await addLog(negativeTest?'Signing challenge; negative test will corrupt the signature...':'Signing challenge with client private key... ✓', 'done');
+  await addLog(result==='SUCCESS'?'Verifying SHA256withRSA signature... ✓':'Verifying SHA256withRSA signature... ✗', result==='SUCCESS'?'done':'error');
+  document.getElementById('connectionIcon').textContent='✓';
+  document.getElementById('connectionTitle').textContent='Client Connected';
+  const connectionText=document.getElementById('connectionText');
+  connectionText.classList.remove('connected-smooth');
+  connectionText.textContent='Client successfully connected to the authentication server.';
+  void connectionText.offsetWidth;
+  connectionText.classList.add('connected-smooth');
+  if(result==='SUCCESS'){
+   document.body.classList.remove('failed'); document.getElementById('authIcon').textContent='✓';
+   document.getElementById('authTitle').textContent='Access Authenticated';
+   document.getElementById('authText').textContent='Client identity verified using a valid SHA256withRSA signature.';
+   document.getElementById('resultBadge').textContent='SUCCESS';
+   await addLog('AUTHENTICATION COMPLETED SUCCESSFULLY ✓', 'done');
+   await typeText(hint,'>>> AUTHENTICATION COMPLETED SUCCESSFULLY <<<',12);
+  }else if(result==='FAIL'){
+   document.body.classList.add('failed'); showSecurityNotice('NEGATIVE TEST CASE: Authentication rejected. The digital signature is invalid; access is denied.'); document.getElementById('authIcon').textContent='×';
+   document.getElementById('authTitle').textContent='Authentication Failed';
+   document.getElementById('authText').textContent='The server rejected the signature. Access denied.';
+   document.getElementById('resultBadge').textContent='ACCESS DENIED';
+   await addLog('SIGNATURE INVALID — ACCESS DENIED ✗', 'error');
+   await typeText(hint,'>>> AUTHENTICATION FAILED • ACCESS DENIED <<<',12);
+  }else throw Error('Unexpected server response: '+result);
+ }catch(e){
+  document.body.classList.add('failed');
+  showSecurityNotice('SERVER NOT CONNECTED: Connect to the Java authentication server first, then click Verify again.');
+  await addLog('Server unavailable or verification response missing.', 'error');
+  document.getElementById('connectionIcon').textContent='×';
+  document.getElementById('connectionTitle').textContent='Server Not Connected';
+  document.getElementById('connectionText').textContent='Authentication server is unavailable. Start both Java servers and retry.';
+  document.getElementById('authIcon').textContent='×';
+  document.getElementById('authTitle').textContent='Authentication Not Completed';
+  document.getElementById('authText').textContent='No verification result was received because the server could not be reached.';
+  document.getElementById('resultBadge').textContent='CONNECTION FAILED';
+  await typeText(hint,'CONNECTION FAILED • ACCESS NOT GRANTED',12);
+ }finally{b.disabled=false}
+}
+
+// Keep the UI at a constant browser zoom while this page is active.
+// Prevent Ctrl+mouse-wheel and Ctrl+Plus/Minus/0 from changing page zoom.
+window.addEventListener('wheel', function (event) {
+  if (event.ctrlKey) event.preventDefault();
+}, { passive: false });
+window.addEventListener('keydown', function (event) {
+  if (!event.ctrlKey && !event.metaKey) return;
+  const key = event.key;
+  if (key === '+' || key === '=' || key === '-' || key === '_' || key === '0' ||
+      event.code === 'NumpadAdd' || event.code === 'NumpadSubtract' || event.code === 'Numpad0') {
+    event.preventDefault();
+  }
+}, { capture: true });
+</script></body></html>

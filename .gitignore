@@ -1,0 +1,14 @@
+# Compiled Java output
+*.class
+
+# Local private keys and generated secrets
+private.key
+*.pem
+*.p12
+*.pfx
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
